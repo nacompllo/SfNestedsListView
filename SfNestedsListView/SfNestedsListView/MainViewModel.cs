@@ -1,0 +1,166 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Windows.Input;
+using Xamarin.Forms;
+
+namespace SfNestedsListView
+{
+    public class MainViewModel : INotifyPropertyChanged
+    {
+        #region INotifyPropertyChanged implementation
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void RaiseOnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        #endregion
+
+        private ObservableCollection<Block> _blocks;
+        public ObservableCollection<Block> Blocks
+        {
+            get => _blocks;
+            set
+            {
+                _blocks = value;
+                RaiseOnPropertyChanged();
+            }
+        }
+
+        private Block _selectedBlock;
+        public Block SelectedBlock
+        {
+            get => _selectedBlock;
+            set
+            {
+                _selectedBlock = value;
+                RaiseOnPropertyChanged();
+                Blocks.Select(x => { x.IsSelected = false; return x; }).ToList();
+                SelectedBlock.IsSelected = true;
+            }
+        }
+
+        private Button _buttonSelected;
+        public Button ButtonSelected
+        {
+            get => _buttonSelected;
+            set
+            {
+                _buttonSelected = value;
+                RaiseOnPropertyChanged();
+            }
+        }
+
+        public ICommand AddButtonToSelectedBlockCommand => new Command(() => AddButtonToSelectedBlock());
+
+        public ICommand SelectButtonCommand => new Command<Button>((btn) => SelectButton(btn));
+
+        public ICommand UpdateSelectedButtonHeightCommand => new Command(() => UpdateSelectedButtonHeight());
+
+        public ICommand AddNewBlockCommand => new Command(() => AddNewBlock());
+
+        public MainViewModel()
+        {
+            Random rnd = new Random();
+
+            Blocks = new ObservableCollection<Block>
+            {
+                new Block
+                {
+                    Name = "Block 1",
+                    Height = rnd.Next(50, 100),
+                    Buttons = new ObservableCollection<Button>
+                    {
+                        new Button
+                        {
+                            Name = "Button 1",
+                            Height = rnd.Next(90, 270)
+                        }
+                    }
+                },
+                new Block
+                {
+                    Name = "Block 2",
+                    Height = rnd.Next(50, 100),
+                    Buttons = new ObservableCollection<Button>
+                    {
+                        new Button
+                        {
+                            Name = "Button 1",
+                            Height = rnd.Next(90, 270)
+                        }
+                    }
+                }
+            };
+            RefreshNestedListHeight();
+        }
+
+        private void AddButtonToSelectedBlock()
+        {
+            if (SelectedBlock != null)
+            {
+                Random rnd = new Random();
+                SelectedBlock.Buttons.Add(new Button
+                {
+                    Name = $"Button {SelectedBlock.Buttons.Count + 1}",
+                    Height = rnd.Next(90, 270)
+                });
+            }
+        }
+
+        private void SelectButton(Button button)
+        {
+            foreach (var block in Blocks)
+            {
+                foreach (var btn in block.Buttons)
+                {
+                    btn.IsSelected = false;
+                }
+            }
+            button.IsSelected = true;
+            ButtonSelected = button;
+        }
+
+        private void UpdateSelectedButtonHeight()
+        {
+            if (ButtonSelected != null)
+            {
+                ButtonSelected.Height = ButtonSelected.Height * 2;
+            }
+        }
+
+        private void AddNewBlock()
+        {
+            Random rnd = new Random();
+
+            var newBlock = new Block
+            {
+                Name = $"Block {Blocks.Count + 1}",
+                Height = rnd.Next(50, 100),
+                Buttons = new ObservableCollection<Button>
+                {
+                    new Button
+                    {
+                        Name = "Button 1",
+                        Height = rnd.Next(90, 270)
+                    }
+                }
+            };
+            Blocks.Add(newBlock);
+        }
+
+        public void RefreshNestedListHeight()
+        {
+            for (var i = 0; i < Blocks.Count; i++)
+            {
+                Blocks[i].NestedListHeight = Blocks[i].Buttons.Sum(x => x.Height);
+            }
+        }
+    }
+}

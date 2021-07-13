@@ -1,0 +1,155 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:syncfusion="clr-namespace:Syncfusion.ListView.XForms;assembly=Syncfusion.SfListView.XForms"   
+             BackgroundColor="Black"
+             x:Name="CurrentPage"
+             xmlns:local="clr-namespace:SfNestedsListView"
+             x:Class="SfNestedsListView.MainPage">
+    <StackLayout>
+        <Grid HorizontalOptions="FillAndExpand"
+              VerticalOptions="FillAndExpand"
+              ColumnDefinitions="8*, 2.5*" 
+              RowDefinitions="*">
+            <StackLayout Grid.Row="0" 
+                         Grid.Column="0">
+                <Button Command="{Binding AddButtonToSelectedBlockCommand}"
+                        FontSize="40"
+                        Text="Add"
+                        BackgroundColor="Gray"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        VerticalOptions="Start"
+                        HorizontalOptions="CenterAndExpand"/>                
+                <Button Command="{Binding UpdateSelectedButtonHeightCommand}"
+                        FontSize="40"
+                        Text="Update Selected Button Height"
+                        BackgroundColor="Gray"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        VerticalOptions="Start"
+                        HorizontalOptions="CenterAndExpand"/>
+                <Button Command="{Binding AddNewBlockCommand}"
+                        FontSize="40"
+                        Text="Add New Block"
+                        BackgroundColor="Gray"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        VerticalOptions="Start"
+                        HorizontalOptions="CenterAndExpand"/>
+            </StackLayout>
+            <StackLayout Grid.Row="0" 
+                         Grid.Column="1"
+                         HorizontalOptions="FillAndExpand"
+                         VerticalOptions="FillAndExpand"
+                         BackgroundColor="Black">
+                <syncfusion:SfListView x:Name="BlocksList"
+                                       ItemsSource="{Binding Blocks}"
+                                       SelectedItem="{Binding SelectedBlock}"
+                                       HorizontalOptions="FillAndExpand"
+                                       VerticalOptions="FillAndExpand"
+                                       SelectionMode="Single"
+                                       FocusBorderColor="Transparent"
+                                       SelectionBackgroundColor="Transparent"
+                                       AutoFitMode="DynamicHeight"
+                                       IsScrollingEnabled="True"
+                                       IsScrollBarVisible="True">
+                    <syncfusion:SfListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <StackLayout HorizontalOptions="FillAndExpand"
+                                             VerticalOptions="FillAndExpand">
+                                    <Label Text="{Binding Name}"
+                                           HeightRequest="{Binding Height}"
+                                           TextColor="White"
+                                           VerticalOptions="Start"
+                                           HorizontalOptions="FillAndExpand"
+                                           LineBreakMode="TailTruncation"                                       
+                                           FontSize="40">
+                                    </Label>
+
+                                    <local:ExtendedListView x:Name="ButtonsList"
+                                                       ItemsSource="{Binding Buttons}" 
+                                                       SelectedItem="{Binding ButtonSelected}"
+                                                       AutoFitMode="DynamicHeight"        
+                                                       IsScrollingEnabled="False"
+                                                       IsScrollBarVisible="False"
+                                                       FocusBorderColor="Transparent"
+                                                       SelectionBackgroundColor="Transparent">
+                                        <local:ExtendedListView.ItemTemplate>
+                                            <DataTemplate>
+                                                <Frame HeightRequest="{Binding Height}"
+                                                       HasShadow="False" 
+                                                       Padding="1"
+                                                       OutlineColor="Blue"
+                                                       VerticalOptions="CenterAndExpand" 
+                                                       HorizontalOptions="FillAndExpand">
+                                                    <AbsoluteLayout HorizontalOptions="FillAndExpand"
+                                                                    VerticalOptions="Start"
+                                                                    HeightRequest="{Binding Height}">
+                                                        <AbsoluteLayout.GestureRecognizers>
+                                                            <TapGestureRecognizer Command="{Binding Source={x:Reference CurrentPage}, Path=BindingContext.SelectButtonCommand}"
+                                                                                  CommandParameter="{Binding .}"/>
+                                                        </AbsoluteLayout.GestureRecognizers>
+                                                        <Label AbsoluteLayout.LayoutBounds="0.5, 0.5, -1, -1" 
+                                                               AbsoluteLayout.LayoutFlags="PositionProportional"
+                                                               Text="{Binding Name}"
+                                                               TextColor="Black"   
+                                                               LineBreakMode="TailTruncation"     
+                                                               HorizontalOptions="CenterAndExpand"
+                                                               VerticalOptions="CenterAndExpand"
+                                                               FontSize="25"/>
+                                                        <VisualStateManager.VisualStateGroups>
+                                                            <VisualStateGroup>
+                                                                <VisualState x:Name="selected">
+                                                                    <VisualState.StateTriggers>
+                                                                        <CompareStateTrigger Property="{Binding IsSelected}" Value="True" />
+                                                                    </VisualState.StateTriggers>
+                                                                    <VisualState.Setters>
+                                                                        <Setter Property="BackgroundColor" Value="Green" />
+                                                                    </VisualState.Setters>
+                                                                </VisualState>
+                                                                <VisualState x:Name="unselected">
+                                                                    <VisualState.StateTriggers>
+                                                                        <CompareStateTrigger Property="{Binding IsSelected}" Value="False" />
+                                                                    </VisualState.StateTriggers>
+                                                                    <VisualState.Setters>
+                                                                        <Setter Property="BackgroundColor" Value="Gray" />
+                                                                    </VisualState.Setters>
+                                                                </VisualState>
+                                                            </VisualStateGroup>
+                                                        </VisualStateManager.VisualStateGroups>
+                                                    </AbsoluteLayout>
+                                                </Frame>
+                                            </DataTemplate>
+                                        </local:ExtendedListView.ItemTemplate>
+                                    </local:ExtendedListView>
+                                    <VisualStateManager.VisualStateGroups>
+                                        <VisualStateGroup>
+                                            <VisualState x:Name="selected">
+                                                <VisualState.StateTriggers>
+                                                    <CompareStateTrigger Property="{Binding IsSelected}" Value="True" />
+                                                </VisualState.StateTriggers>
+                                                <VisualState.Setters>
+                                                    <Setter Property="BackgroundColor" Value="Orange" />
+                                                </VisualState.Setters>
+                                            </VisualState>
+                                            <VisualState x:Name="unselected">
+                                                <VisualState.StateTriggers>
+                                                    <CompareStateTrigger Property="{Binding IsSelected}" Value="False" />
+                                                </VisualState.StateTriggers>
+                                                <VisualState.Setters>
+                                                    <Setter Property="BackgroundColor" Value="Black" />
+                                                </VisualState.Setters>
+                                            </VisualState>
+                                        </VisualStateGroup>
+                                    </VisualStateManager.VisualStateGroups>
+                                </StackLayout>
+                            </Grid>
+                        </DataTemplate>
+                    </syncfusion:SfListView.ItemTemplate>
+                </syncfusion:SfListView>
+            </StackLayout>
+        </Grid>
+    </StackLayout>
+</ContentPage>
