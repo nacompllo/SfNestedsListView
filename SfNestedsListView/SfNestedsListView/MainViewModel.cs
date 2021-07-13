@@ -98,6 +98,8 @@ namespace SfNestedsListView
                     }
                 }
             };
+            Blocks[0].IsSelected = true;
+            SelectedBlock = Blocks[0];
             RefreshNestedListHeight();
         }
 
