@@ -16,7 +16,6 @@
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
     <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
     <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
-    <AndroidUseLatestPlatformSdk>false</AndroidUseLatestPlatformSdk>
     <TargetFrameworkVersion>v10.0</TargetFrameworkVersion>
     <AndroidEnableSGenConcurrent>true</AndroidEnableSGenConcurrent>
     <AndroidUseAapt2>true</AndroidUseAapt2>
@@ -91,7 +90,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SfNestedsListView\SfNestedsListView.csproj">
-      <Project>{0706C21E-F1DF-4D33-B345-DC8C119BD2A0}</Project>
+      <Project>{E2EABAB6-2F4D-410B-9F51-B80B0BF11C6D}</Project>
       <Name>SfNestedsListView</Name>
     </ProjectReference>
   </ItemGroup>
