@@ -1,5 +1,6 @@
 ﻿using AppKit;
 using Foundation;
+using Syncfusion.ListView.XForms.MacOS;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.MacOS;
 // also add a using for the Xamarin.Forms project, if the namespace is different to this file
@@ -29,6 +30,7 @@ namespace SfNestedsListView.MacOS
         {
             Forms.Init();
             LoadApplication(new App());
+            SfListViewRenderer.Init();
             base.DidFinishLaunching(notification);
         }
     }

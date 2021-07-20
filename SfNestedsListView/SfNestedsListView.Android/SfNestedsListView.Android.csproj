@@ -54,10 +54,10 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Syncfusion.Xamarin.SfListView">
-      <Version>19.2.0.47</Version>
+      <Version>19.2.0.48</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2083" />
-    <PackageReference Include="Xamarin.Essentials" Version="1.6.1" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.7.0" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainActivity.cs" />
