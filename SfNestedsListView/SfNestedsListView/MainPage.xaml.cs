@@ -32,5 +32,12 @@ namespace SfNestedsListView
             var displayItems = buttonsListView.DataSource.DisplayItems.Where(o => (o as GroupResult) != null);
             buttonsListView.LayoutManager = new GridLayout() { SpanCount = displayItems.Max(o => (o as GroupResult).Items.ToList<object>().Count()) };
         }
+
+        private void ButtonsList_ChildAdded(object sender, ElementEventArgs e)
+        {
+            var buttonsListView = sender as SfListView;
+            var displayItems = buttonsListView.DataSource.DisplayItems.Where(o => (o as GroupResult) != null);
+            buttonsListView.LayoutManager = new GridLayout() { SpanCount = displayItems.Max(o => (o as GroupResult).Items.ToList<object>().Count()) };
+        }
     }
 }

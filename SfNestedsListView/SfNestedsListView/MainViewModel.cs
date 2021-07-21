@@ -97,7 +97,8 @@ namespace SfNestedsListView
                         {
                             Name = "Button 1",
                             Height = rnd.Next(90, 270),
-                            Width = 50
+                            Width = 50,
+                            Group = "0"
                         }
                     }
                 },
@@ -111,14 +112,13 @@ namespace SfNestedsListView
                         {
                             Name = "Button 1",
                             Height = rnd.Next(90, 270),
-                            Width = 50
+                            Width = 50,
+                            Group = "0"
                         }
                     }
                 }
             };
             Blocks[0].IsSelected = true;
-            Blocks[0].Buttons[0].Group = "0";
-            Blocks[1].Buttons[0].Group = "0";
             SelectedBlock = Blocks[0];
             RefreshNestedListHeight();
         }

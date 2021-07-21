@@ -51,13 +51,20 @@
                        VerticalOptions="Start"
                        TextColor="White"
                        FontSize="Medium"/>
-                    <Entry Text="{Binding ButtonSelected.Width}" 
-                       HorizontalOptions="Start"
-                       VerticalOptions="Start"
-                           WidthRequest="100"
-                       BackgroundColor="White"
-                       TextColor="Black"
-                       FontSize="Small"/>
+                    <StackLayout Orientation="Horizontal">
+                        <Entry Text="{Binding ButtonSelected.Width}" 
+                               HorizontalOptions="Start"
+                               VerticalOptions="Start"
+                               WidthRequest="100"
+                               BackgroundColor="White"
+                               TextColor="Black"
+                               FontSize="Small"/>
+                        <Label Text="%"
+                               HorizontalOptions="Start"
+                               VerticalOptions="Start"
+                               TextColor="White"
+                               FontSize="Medium"/>
+                    </StackLayout>
                 </StackLayout>
             </StackLayout>
             <StackLayout Grid.Row="0" 
@@ -93,6 +100,7 @@
                                     <local:ExtendedListView x:Name="ButtonsList"
                                                        ItemsSource="{Binding Buttons}" 
                                                        Loaded="ButtonsList_Loaded"
+                                                       ChildAdded="ButtonsList_ChildAdded"
                                                        SelectedItem="{Binding ButtonSelected}"
                                                        AutoFitMode="DynamicHeight"        
                                                        IsScrollingEnabled="False"
