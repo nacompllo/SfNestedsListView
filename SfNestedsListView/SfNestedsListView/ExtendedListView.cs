@@ -18,7 +18,7 @@ namespace SfNestedsListView
 
         public ExtendedListView()
         {
-            if (Device.RuntimePlatform == Device.UWP)
+            if (Device.RuntimePlatform == Device.UWP || Device.RuntimePlatform == Device.macOS)
             {
                 this.container = this.GetVisualContainer();
                 this.DataSource.SourceCollectionChanged += DataSource_SourceCollectionChanged;
