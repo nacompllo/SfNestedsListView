@@ -1,4 +1,5 @@
-﻿using Syncfusion.ListView.XForms;
+﻿using Syncfusion.DataSource.Extensions;
+using Syncfusion.ListView.XForms;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -23,6 +24,13 @@ namespace SfNestedsListView
             var listView = sender as SfListView;
             listView.RefreshListViewItem();
             ((MainViewModel)BindingContext).RefreshNestedListHeight();
+        }
+
+        private void ButtonsList_Loaded(object sender, ListViewLoadedEventArgs e)
+        {
+            var buttonsListView = sender as SfListView;
+            var displayItems = buttonsListView.DataSource.DisplayItems.Where(o => (o as GroupResult) != null);
+            buttonsListView.LayoutManager = new GridLayout() { SpanCount = displayItems.Max(o => (o as GroupResult).Items.ToList<object>().Count()) };
         }
     }
 }

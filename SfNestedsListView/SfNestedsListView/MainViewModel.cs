@@ -54,6 +54,22 @@ namespace SfNestedsListView
             {
                 _buttonSelected = value;
                 RaiseOnPropertyChanged();
+                if(ButtonSelected != null)
+                {
+                    WidthSelectedButton = ButtonSelected.Width;
+                }
+            }
+        }        
+        
+        private double _widthSelectedButton;
+        public double WidthSelectedButton
+        {
+            get => _widthSelectedButton;
+            set
+            {
+                _widthSelectedButton = value;
+                RaiseOnPropertyChanged();
+                UpdateSelectedButtonWidth();
             }
         }
 
@@ -80,7 +96,8 @@ namespace SfNestedsListView
                         new Button
                         {
                             Name = "Button 1",
-                            Height = rnd.Next(90, 270)
+                            Height = rnd.Next(90, 270),
+                            Width = 50
                         }
                     }
                 },
@@ -93,12 +110,15 @@ namespace SfNestedsListView
                         new Button
                         {
                             Name = "Button 1",
-                            Height = rnd.Next(90, 270)
+                            Height = rnd.Next(90, 270),
+                            Width = 50
                         }
                     }
                 }
             };
             Blocks[0].IsSelected = true;
+            Blocks[0].Buttons[0].Group = "0";
+            Blocks[1].Buttons[0].Group = "0";
             SelectedBlock = Blocks[0];
             RefreshNestedListHeight();
         }
@@ -108,11 +128,15 @@ namespace SfNestedsListView
             if (SelectedBlock != null)
             {
                 Random rnd = new Random();
-                SelectedBlock.Buttons.Add(new Button
+                var newButton = new Button
                 {
                     Name = $"Button {SelectedBlock.Buttons.Count + 1}",
-                    Height = rnd.Next(90, 270)
-                });
+                    Height = rnd.Next(90, 270),
+                    Width = rnd.Next(10, 100),
+                    Group = "0"
+                };
+
+                SelectedBlock.Buttons.Add(newButton);
             }
         }
 
@@ -150,7 +174,9 @@ namespace SfNestedsListView
                     new Button
                     {
                         Name = "Button 1",
-                        Height = rnd.Next(90, 270)
+                        Height = rnd.Next(90, 270),
+                        Width = rnd.Next(10, 100),
+                        Group = "0"
                     }
                 }
             };
@@ -162,6 +188,14 @@ namespace SfNestedsListView
             for (var i = 0; i < Blocks.Count; i++)
             {
                 Blocks[i].NestedListHeight = Blocks[i].Buttons.Sum(x => x.Height);
+            }
+        }
+
+        private void UpdateSelectedButtonWidth()
+        {
+            if(ButtonSelected != null)
+            {
+                ButtonSelected.Width = WidthSelectedButton;
             }
         }
     }

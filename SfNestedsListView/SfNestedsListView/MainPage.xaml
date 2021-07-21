@@ -2,10 +2,17 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:syncfusion="clr-namespace:Syncfusion.ListView.XForms;assembly=Syncfusion.SfListView.XForms"   
+             xmlns:converters="clr-namespace:SfNestedsListView.Converters"                                 
              BackgroundColor="Black"
              x:Name="CurrentPage"
-             xmlns:local="clr-namespace:SfNestedsListView"
+             xmlns:local="clr-namespace:SfNestedsListView" 
+             xmlns:dataSource="clr-namespace:Syncfusion.DataSource;assembly=Syncfusion.DataSource.Portable"
              x:Class="SfNestedsListView.MainPage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:WidthButtonConverter x:Key="WidthButtonConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <StackLayout>
         <Grid HorizontalOptions="FillAndExpand"
               VerticalOptions="FillAndExpand"
@@ -20,7 +27,7 @@
                         TextColor="White"
                         FontAttributes="Bold"
                         VerticalOptions="Start"
-                        HorizontalOptions="CenterAndExpand"/>                
+                        HorizontalOptions="CenterAndExpand"/>
                 <Button Command="{Binding UpdateSelectedButtonHeightCommand}"
                         FontSize="40"
                         Text="Update Selected Button Height"
@@ -37,6 +44,21 @@
                         FontAttributes="Bold"
                         VerticalOptions="Start"
                         HorizontalOptions="CenterAndExpand"/>
+                <StackLayout HorizontalOptions="CenterAndExpand"
+                             VerticalOptions="Start">
+                    <Label Text="Width button selected:"
+                       HorizontalOptions="Start"
+                       VerticalOptions="Start"
+                       TextColor="White"
+                       FontSize="Medium"/>
+                    <Entry Text="{Binding ButtonSelected.Width}" 
+                       HorizontalOptions="Start"
+                       VerticalOptions="Start"
+                           WidthRequest="100"
+                       BackgroundColor="White"
+                       TextColor="Black"
+                       FontSize="Small"/>
+                </StackLayout>
             </StackLayout>
             <StackLayout Grid.Row="0" 
                          Grid.Column="1"
@@ -60,7 +82,7 @@
                                 <StackLayout HorizontalOptions="FillAndExpand"
                                              VerticalOptions="FillAndExpand">
                                     <Label Text="{Binding Name}"
-                                           HeightRequest="{Binding Height}"
+                                           HeightRequest="{Binding WidthSelectedButton}"
                                            TextColor="White"
                                            VerticalOptions="Start"
                                            HorizontalOptions="FillAndExpand"
@@ -70,28 +92,39 @@
 
                                     <local:ExtendedListView x:Name="ButtonsList"
                                                        ItemsSource="{Binding Buttons}" 
+                                                       Loaded="ButtonsList_Loaded"
                                                        SelectedItem="{Binding ButtonSelected}"
                                                        AutoFitMode="DynamicHeight"        
                                                        IsScrollingEnabled="False"
                                                        IsScrollBarVisible="False"
                                                        FocusBorderColor="Transparent"
                                                        SelectionBackgroundColor="Transparent">
+                                        <local:ExtendedListView.DataSource>
+                                            <dataSource:DataSource>
+                                                <dataSource:DataSource.GroupDescriptors>
+                                                    <dataSource:GroupDescriptor PropertyName="Group"/>
+                                                </dataSource:DataSource.GroupDescriptors>
+                                            </dataSource:DataSource>
+                                        </local:ExtendedListView.DataSource>
                                         <local:ExtendedListView.ItemTemplate>
                                             <DataTemplate>
-                                                <Frame HeightRequest="{Binding Height}"
+                                                <StackLayout HorizontalOptions="Start"
+                                                             VerticalOptions="Start"
+                                                             WidthRequest="{Binding Width, Converter={StaticResource WidthButtonConverter}, ConverterParameter={x:Reference ButtonsList}}">
+                                                    <Frame HeightRequest="{Binding Height}"
                                                        HasShadow="False" 
                                                        Padding="1"
                                                        OutlineColor="Blue"
                                                        VerticalOptions="CenterAndExpand" 
                                                        HorizontalOptions="FillAndExpand">
-                                                    <AbsoluteLayout HorizontalOptions="FillAndExpand"
+                                                        <AbsoluteLayout HorizontalOptions="FillAndExpand"
                                                                     VerticalOptions="Start"
                                                                     HeightRequest="{Binding Height}">
-                                                        <AbsoluteLayout.GestureRecognizers>
-                                                            <TapGestureRecognizer Command="{Binding Source={x:Reference CurrentPage}, Path=BindingContext.SelectButtonCommand}"
+                                                            <AbsoluteLayout.GestureRecognizers>
+                                                                <TapGestureRecognizer Command="{Binding Source={x:Reference CurrentPage}, Path=BindingContext.SelectButtonCommand}"
                                                                                   CommandParameter="{Binding .}"/>
-                                                        </AbsoluteLayout.GestureRecognizers>
-                                                        <Label AbsoluteLayout.LayoutBounds="0.5, 0.5, -1, -1" 
+                                                            </AbsoluteLayout.GestureRecognizers>
+                                                            <Label AbsoluteLayout.LayoutBounds="0.5, 0.5, -1, -1" 
                                                                AbsoluteLayout.LayoutFlags="PositionProportional"
                                                                Text="{Binding Name}"
                                                                TextColor="Black"   
@@ -99,28 +132,29 @@
                                                                HorizontalOptions="CenterAndExpand"
                                                                VerticalOptions="CenterAndExpand"
                                                                FontSize="25"/>
-                                                        <VisualStateManager.VisualStateGroups>
-                                                            <VisualStateGroup>
-                                                                <VisualState x:Name="selected">
-                                                                    <VisualState.StateTriggers>
-                                                                        <CompareStateTrigger Property="{Binding IsSelected}" Value="True" />
-                                                                    </VisualState.StateTriggers>
-                                                                    <VisualState.Setters>
-                                                                        <Setter Property="BackgroundColor" Value="Green" />
-                                                                    </VisualState.Setters>
-                                                                </VisualState>
-                                                                <VisualState x:Name="unselected">
-                                                                    <VisualState.StateTriggers>
-                                                                        <CompareStateTrigger Property="{Binding IsSelected}" Value="False" />
-                                                                    </VisualState.StateTriggers>
-                                                                    <VisualState.Setters>
-                                                                        <Setter Property="BackgroundColor" Value="Gray" />
-                                                                    </VisualState.Setters>
-                                                                </VisualState>
-                                                            </VisualStateGroup>
-                                                        </VisualStateManager.VisualStateGroups>
-                                                    </AbsoluteLayout>
-                                                </Frame>
+                                                            <VisualStateManager.VisualStateGroups>
+                                                                <VisualStateGroup>
+                                                                    <VisualState x:Name="selected">
+                                                                        <VisualState.StateTriggers>
+                                                                            <CompareStateTrigger Property="{Binding IsSelected}" Value="True" />
+                                                                        </VisualState.StateTriggers>
+                                                                        <VisualState.Setters>
+                                                                            <Setter Property="BackgroundColor" Value="Green" />
+                                                                        </VisualState.Setters>
+                                                                    </VisualState>
+                                                                    <VisualState x:Name="unselected">
+                                                                        <VisualState.StateTriggers>
+                                                                            <CompareStateTrigger Property="{Binding IsSelected}" Value="False" />
+                                                                        </VisualState.StateTriggers>
+                                                                        <VisualState.Setters>
+                                                                            <Setter Property="BackgroundColor" Value="Gray" />
+                                                                        </VisualState.Setters>
+                                                                    </VisualState>
+                                                                </VisualStateGroup>
+                                                            </VisualStateManager.VisualStateGroups>
+                                                        </AbsoluteLayout>
+                                                    </Frame>
+                                                </StackLayout>
                                             </DataTemplate>
                                         </local:ExtendedListView.ItemTemplate>
                                     </local:ExtendedListView>
