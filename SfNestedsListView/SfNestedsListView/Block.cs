@@ -13,6 +13,8 @@ namespace SfNestedsListView
 
         public double Height { get; set; }
 
+        public int Columns { get; set; }
+
         public bool IsSelected { get; set; }
 
         public ObservableCollection<Button> Buttons { get; set; }

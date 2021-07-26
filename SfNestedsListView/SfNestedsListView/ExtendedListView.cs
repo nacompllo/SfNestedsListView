@@ -1,4 +1,5 @@
-﻿using Syncfusion.ListView.XForms;
+﻿using Syncfusion.DataSource.Extensions;
+using Syncfusion.ListView.XForms;
 using Syncfusion.ListView.XForms.Control.Helpers;
 using System;
 using System.Collections.Generic;
@@ -33,6 +34,13 @@ namespace SfNestedsListView
                 var extent = (double)container.GetType().GetRuntimeProperties().FirstOrDefault(container => container.Name == "TotalExtent").GetValue(container);
                 if (e.PropertyName == "Height")
                     this.HeightRequest = extent;
+
+                var displayItems = this.DataSource.DisplayItems.Where(o => (o as GroupResult) != null);
+                if (displayItems.Any())
+                {
+                    var size = this.Width / this.ItemSize;
+                    this.LayoutManager = new GridLayout() { SpanCount = (int)size };
+                }
             });
         }
 
@@ -42,9 +50,14 @@ namespace SfNestedsListView
             {
                 var totalextent = (double)container.GetType().GetRuntimeProperties().FirstOrDefault(container => container.Name == "TotalExtent").GetValue(container);
                 this.HeightRequest = totalextent;
-            });
-        }
 
-     
+                var displayItems = this.DataSource.DisplayItems.Where(o => (o as GroupResult) != null);
+                if (displayItems.Any())
+                {
+                    var size = this.Width / this.ItemSize;
+                    this.LayoutManager = new GridLayout() { SpanCount = (int)size };
+                }
+            });
+        }   
     }
 }

@@ -90,6 +90,7 @@ namespace SfNestedsListView
                 new Block
                 {
                     Name = "Block 1",
+                    Columns = 1,
                     Height = rnd.Next(50, 100),
                     Buttons = new ObservableCollection<Button>
                     {
@@ -99,12 +100,20 @@ namespace SfNestedsListView
                             Height = rnd.Next(90, 270),
                             Width = 50,
                             Group = "0"
-                        }
+                        },                        
+                        new Button
+                        {
+                            Name = "Button 2",
+                            Height = rnd.Next(90, 270),
+                            Width = 50,
+                            Group = "0"
+                        },
                     }
                 },
                 new Block
                 {
                     Name = "Block 2",
+                    Columns = 1,
                     Height = rnd.Next(50, 100),
                     Buttons = new ObservableCollection<Button>
                     {
@@ -132,10 +141,30 @@ namespace SfNestedsListView
                 {
                     Name = $"Button {SelectedBlock.Buttons.Count + 1}",
                     Height = rnd.Next(90, 270),
-                    Width = rnd.Next(10, 100),
+                    Width = 50,
                     Group = "0"
                 };
 
+                var auxList = new List<Button>();
+                var group = 0;
+                var rowCount = SelectedBlock.Columns;
+
+                foreach (var item in Blocks)
+                {
+                    foreach (var button in item.Buttons)
+                    {
+                        auxList.Add(button);
+                        var totalWidth = auxList.Sum(x => x.Width);
+                        if (totalWidth >= 100)
+                        {
+                            button.Group = "0";
+                            rowCount++;
+                            auxList.Clear();
+                            auxList = new List<Button>();
+                        }
+                    }   
+                }
+                SelectedBlock.Columns = rowCount;
                 SelectedBlock.Buttons.Add(newButton);
             }
         }
@@ -168,6 +197,7 @@ namespace SfNestedsListView
             var newBlock = new Block
             {
                 Name = $"Block {Blocks.Count + 1}",
+                Columns = 1,
                 Height = rnd.Next(50, 100),
                 Buttons = new ObservableCollection<Button>
                 {
@@ -175,7 +205,7 @@ namespace SfNestedsListView
                     {
                         Name = "Button 1",
                         Height = rnd.Next(90, 270),
-                        Width = rnd.Next(10, 100),
+                        Width = 50,
                         Group = "0"
                     }
                 }
